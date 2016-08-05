@@ -10,7 +10,7 @@ Hibernate 5.1 Release 에 추가된 load-by-multiple-id API 는 여러가지로 
 
 이 글에 대한 결론 부터 이야기하고 내용을 풀어보겠다.
 
-**load-by-multiple-id API 는 여러 옵션에 따라서 기대되는 실행 결과가 달라진다. 그러니 옵션들과 그에 따른 영향들을 잘 모르겠으면 차라리 사용하지 말자. JPQL 로 충분하다. (현재 버전 Hibernate 5.2.2)**
+**load-by-multiple-id API 는 여러 옵션에 따라서 실행 결과가 달라진다. 그러니 옵션들과 그에 따른 영향들을 잘 모르겠으면 차라리 사용하지 말자. JPQL 로 충분하다. (현재 버전 Hibernate 5.2.2)**
 
 아래 글에 API 에 대한 간단한 소개가 있어 이에 대한 요약과 이외에 조심해야 되는 부분, 그리고 5.2.2 에서 추가되는 옵션에 대해서 간단히 정리하고자 한다. <br /> [How to fetch muliple entities by id with Hibernate 5](http://www.thoughts-on-java.org/fetch-multiple-entities-id-hibernate/)
 
@@ -127,7 +127,13 @@ remove 후에 `em.find()` 로 조회하면 아직 1차 Cache 에는 관리되고
 
 JPA / Hibernate 에서 조회를 위해 사용하는 `em.find / session.byId().load() / JPQL` 과 다른 결과를 반환하는 점을 발견하고 Bug 라고 판단하여 Issue + Pull-Request 를 보냈지만 "Working as Designed" 로 결론. <br />
 2번은 옵션을 추가하여 Hibernate 5.2.2 에 반영되었고, 3번은 아직 남아있다. <br />
-따라서 `multiLoad` 를 사용할 때는 JPQL 과 같이 `flush` 하지 않고 remove 된 결과가 반환될 수 있다는 것을 알고 사용해야 한다. (5.2.2 에서 2번은 해결되었다.)
+따라서 `multiLoad` 를 사용할 때는 JPQL 과 같이 `flush` 하지 않고 remove 된 결과가 반환될 수 있다는 것을 알고 사용해야 한다. (5.2.2 에서 2번은 해결되었다.) <br />
+
+Hibernate 는 ORM 프레임워크이다. 비즈니스 구현시 영속성과 관련된 구현체와 내부 동작에 의존하지 않고 비즈니스 로직을 수행할 수 있도록 설계되어야 한다고 생각한다. <br />
+물론 최적화를 위해서는 내부 동작을 알고 옵션들을 수정해야 하지만, default 옵션은 일관성이 유지되도록 해야되지 않을까 라고 생각한다.
+반면에 `load-by-multiple-id API` 는 default 옵션이 이러한 일관성을 깨뜨리고 있다. 그말은 성능은 둘째 치더라도 결과가 달라지기 때문에 사용자가 옵션을 잘 알고 사용해야 한다는 말이다. "Working as Designed" 가 어떤 의도인지 잘 와닿지는 않는다. <br />
+
+따라서,
 
 **이런 저런 옵션과 상황에 따라 달라지는 결과가 복잡하고 이해할 수 없다면 multiLoad 를 사용하지 말고 그냥 JPQL 을 사용하는게 속편하다.**
 
