@@ -48,4 +48,9 @@ Hibernate 는 기본 batch size 를 databse dialect 에 맞춰서 사용한다.
 
 * Don't fetch entities already stored in 1st level cache
 
-JPQL Query 를 사용하여
+JPQL Query 를 사용하여 entity 리스트를 조회하면 Hibernate 는 database 로 부터 대상이 되는 모든 entity 를 조회한 후에 현재 Session 의 1차 Cache 에서 이미 관리중인 entity 인지 체크한다.
+
+'MultiIdentifierLoadAccess interface' 의 'enableSessionCheck(boolean enabled)' 를 true 로 설정하면 Hibernate 가 database 에 Query 를 실행하기 전에 1차 Cache 를 체크하고 파라미터를 결정하게 할 수 있다.  (default : false)
+
+{% gist mhyeon-lee/a6f69fa0d57938b9f11658cb5e32ebe2 MultiLoadCache.java %}
+{% gist mhyeon-lee/4137dc7ef86f575efaf72dff222b7962 %}
