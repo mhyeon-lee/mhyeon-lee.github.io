@@ -9,7 +9,7 @@ Hibernate 5.1 Release 에 추가된 load-by-multiple-id API 는 여러가지로 
 
 아래 글에 API 에 대한 간단한 소개가 있어 이에 대한 요약과 이외에 조심해야 되는 부분, 그리고 5.2.2 에서 추가되는 옵션에 대해서 간단히 정리하고자 한다. <br /> [How to fetch muliple entities by id with Hibernate 5](http://www.thoughts-on-java.org/fetch-multiple-entities-id-hibernate/)
 
-## load-by-multiple-id API (요약)
+## How to fetch muliple entities by id with Hibernate 5 요약
 
 JPA 나 Hibernate 5.1 이전 버전를 사용할 때 database 에서 다수의 entity들을 조회하기 위한 방법으로 2가지를 생각할 수 있다.
 
@@ -56,3 +56,21 @@ JPQL Query 를 사용하여 entity 리스트를 조회하면 Hibernate 는 datab
 
 {% gist mhyeon-lee/a6f69fa0d57938b9f11658cb5e32ebe2 MultiLoadCache.java %}
 {% gist mhyeon-lee/4137dc7ef86f575efaf72dff222b7962 MultiLoadCache.log %}
+
+## Bug? Woking as Design?
+
+해당 글에서 load-by-multiple-id API 의 특징들에 대해 잘 소개되어 있다.
+여기서 언급되지 않았지만, 사용하면서 경험한 몇가지 특징들을 추가적으로 적어보겠다.
+
+load-by-multiple-id API 는 Hibernate 5.1 Release 를 기다리던 이유 중에 하나였다.
+비록 JPA 에서 제공되는 API 가 아니라 Hibernate Session 을 unWrap 해야 하지만, 성능 최적화에 활용할 수 있어 기다릴만한 가치가 있었던 feature 였다.
+실제 프로젝트에 load-by-multiple-id API 를 사용하면서 몇가지 이상한? 동작을 발견할 수 있었다.
+
+**flush 되지 않은 entity 들이 결과에 반영되지 않는다.**
+
+Hibernate 는 기본적으로 JPQL(HQL) Query 를 실행할 때 Session 을 먼저 flush 시킨 후에 Query 를 실행한다.
+Session의 상태와 관계없이 일관된(consistency) 결과를 낼 수 있도록 database 와 먼저 동기화를 진행하는 것이다.
+하지만, multiLoad API 는 Query 실행 전에 Session 을 flush 시키지 않는다. 이에 따라 일반적(?)이지 않은 결과가 나올때가 있다.
+
+1. flush 되지 않은 persist entity 가 결과에 반영되지 않는다.
+{% gist mhyeon-lee/8e5152369d66640f440286c11ae923e8 MultiLoadWithNotFlushed.java %}
