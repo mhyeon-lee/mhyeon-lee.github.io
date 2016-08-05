@@ -112,16 +112,23 @@ enableSessionCheck == true 라도 일관되지 않은 결과가 나온다.
 [Pull-Request](https://github.com/hibernate/hibernate-orm/pull/1489)
 
 1번은 파라미터로 넘어온 id 리스트가 클 경우 세션 체크를 위해 순회하는 오버헤드가 걱정된다.
-2번은 REMOVED 를 체크해서 반환하지 않는걸로 결정
+2번은 REMOVED 를 체크해서 반환하지 않는 옵션을 추가하기로 결정 (default = false)
 3번은 "Working as Designed" 라면서 Reject (원래 저렇게 되도록 설계했다는 것이다.)
 
 내 Pull-Request 는 reject 시키고, 2번만 자기들이 개발해서 반영했다. <br />
-https://github.com/mhyeon-lee/hibernate-orm/commit/72e948514e95cbc2c7e8713a36ed461845d8c89e
+[Commit](https://github.com/mhyeon-lee/hibernate-orm/commit/72e948514e95cbc2c7e8713a36ed461845d8c89e)
 
 **결론**
-JPA / Hibernate 에서 조회를 위해 사용하는 em.find / session.byId().load() / JPQL 과 다른 결과를 반환하는 점을 발견하고 Bug 라고 판단하여 Issue + Pull-Request 를 보냈지만 "Working as Designed" 로 결론.
-2번은 수정되어서 Hibernate 5.2.2 에 반영되었고, 3번은 아직 남아있다.
-따라서 multiLoad 를 사용할 때는 JPQL 과 같이 flush 되지 않아 다른 결과를 반환할 수 있다는 점을 인지하고 사용해야 한다.
+
+JPA / Hibernate 에서 조회를 위해 사용하는 em.find / session.byId().load() / JPQL 과 다른 결과를 반환하는 점을 발견하고 Bug 라고 판단하여 Issue + Pull-Request 를 보냈지만 "Working as Designed" 로 결론. <br />
+2번은 옵션을 추가하여 Hibernate 5.2.2 에 반영되었고, 3번은 아직 남아있다. <br />
+따라서 multiLoad 를 사용할 때는 JPQL 과 같이 flush 되지 않고 enableSessionCheck == true 일때 remove 된 결과가 반환될 수 있다는 것을 알고 사용해야 한다. (5.2.2 에서 2번은 옵션으로 true 를 셋팅해서 해결할 수 있다.)
+
+**이런 저런 옵션과 상황에 따라 달라지는 결과가 복잡하고 이해할 수 없다면 multiLoad 를 사용하지 말고 그냥 JPQL 을 사용하는게 속편하다.**
 
 
+## Hibernate 5.2.2 에서 multiLoad 에 추가된 옵션
 
+5.2.2 에서 multiLoad 와 관련하여 2가지 옵션이 추가된다.
+
+1. 위에서 언급한 
