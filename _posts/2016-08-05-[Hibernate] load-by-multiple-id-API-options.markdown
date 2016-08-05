@@ -145,7 +145,7 @@ Hibernate 는 ORM 프레임워크이다. 비즈니스 구현시 영속성과 관
 
 ## Hibernate 5.2.2 에서 multiLoad 에 추가된 옵션
 
-5.2.2 에서 `multiLoad` 와 관련하여 2가지 옵션이 추가된다.
+5.2.2 에서 `multiLoad` 와 관련하여 2가지 옵션이 추가된다. [@72e9485](https://github.com/mhyeon-lee/hibernate-orm/commit/72e948514e95cbc2c7e8713a36ed461845d8c89e)
 
 1. `enableReturnOfDeletedEntities` (default : false)
     > 2번에 대한 이슈 대안으로 추가된 옵션이다. <br />
@@ -155,5 +155,3 @@ Hibernate 는 ORM 프레임워크이다. 비즈니스 구현시 영속성과 관
     > 파라미터로 보낸 id 의 순서로 정렬되어 결과 List 를 반환한다. <br />
     > id 파라미터 중 결과가 없는 id 의 index 에는 null 로 셋팅되어 반환한다. (결과를 순회할 때 NPE 를 조심해야 한다.) <br />
     > false 로 변경하면 쿼리 결과 순서로 결과를 반환한다. (`enableSesscionCheck == true` 이면, 1차 Cache 에 존재하는 Entity 들이 결과 List 의 앞에 배치된다.)
-
-[@72e9485](https://github.com/mhyeon-lee/hibernate-orm/commit/72e948514e95cbc2c7e8713a36ed461845d8c89e)
