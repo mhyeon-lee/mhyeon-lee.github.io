@@ -17,9 +17,5 @@ JPA 나 Hibernate 5.1 이전 버전를 사용할 때 database 에서 다수의 e
  
 2. IN 조건을 사용하여 query 를 만들어서 실행한다.
 
-{% highlight java %}
-List<Long> ids = Arrays.asList(new []{1L, 2L, 3L});
-List<PersonEntity> persons = em.createQuery("SELECT p FROM Person p WHERE p.id IN :ids")
-                                .setParameter("ids", ids)
-                                .getResultList();
-{% endhighlight %}
+{% gist 3cbecf69967a624697b178a99b299882 %}
+
