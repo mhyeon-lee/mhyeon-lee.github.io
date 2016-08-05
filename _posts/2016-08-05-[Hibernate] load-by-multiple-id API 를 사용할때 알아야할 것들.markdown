@@ -27,7 +27,7 @@ JPA 나 Hibernate 5.1 이전 버전를 사용할 때 database 에서 다수의 e
    
 Hibernate 5.1 은 다수의 엔티티들을 한번의 API 실행하고 위와 같은 문제점들을 회피할 수 있는 새로운 API 를 제공한다.
 
-{% gist mhyeon-lee/9ba9e14c278f2ce18424a3854214bad1 MultiLoad.java %}
+{% gist mhyeon-lee/45da2f5d6a90e981e67401872c43b587 MultiLoad.java %}
 
 Hibernate Session 에서 위와 같은 API 를 사용하면 id 가 1L, 2L, 3L 인 PersionEntity 클래스를 조회할 수 있다.
 Hiberante 는 3개의 Id 를 파라미터로 IN statement Query 를 실행한다.
