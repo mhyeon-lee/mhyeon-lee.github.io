@@ -24,4 +24,9 @@ JPA 나 Hibernate 5.1 이전 버전를 사용할 때 database 에서 다수의 e
    > Oracle과 같은 몇개의 database 는 IN statement의 파라미터 갯수에 제한을 둔다. <br />
    > 많은 엔티티를 한번의 batch 로 조회하게 되면 성능 이슈가 발생할 수 있다. <br />
    > Hibernate 1차 Cache(Session) 에 이미 올라와 있는 엔티티를 체크하지 않고 모든 엔티티를 database 에서 조회한다. <br />
+   
+Hibernate 5.1 은 다수의 엔티티들을 한번의 API 실행하고 위와 같은 문제점들을 회피할 수 있는 새로운 API 를 제공한다.
+
+JPA 를 사용하면 아래와 같이 EntityManager 에서 아래와 같이 unwrap() 을 사용해서 Hibernate Session 을 얻을 수 있다
+{% gist mhyeon-lee/9ba9e14c278f2ce18424a3854214bad1 UnwrapHibernateSession.java %}
 
