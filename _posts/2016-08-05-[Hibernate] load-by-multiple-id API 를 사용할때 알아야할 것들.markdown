@@ -96,7 +96,17 @@ enableSessionCheck 를 true 로 설정하면 multiLoad Query 를 만들때, Sess
 enabelSessionCheck == true 이기 때문에 remove 된 entity 가 결과에 반환되지 않을거 같다. 하지만 결과는 id가 1L 인 en;tity 를 반환한다. em.find() 의 경우 위에서 언급했듯이, 1차 Cache 에 존재하더라도 내부적으로 REMOVED 로 mark 되어 결과를 return 하지 않는다. 하지만 multiLoad 는 Session 에서 체크 후 REMOVED mark 상태를 확인하지 않고 entity 를 반환한다. <br />
 enableSessionCheck == true 라도 일관되지 않은 결과가 나온다.
 
+기존의 em.find() / JPQL 의 동작 결과와 일관성을 유지하고 친숙한 동작 방식으로 아래와 같이 고쳐져야 할 것 같았다.
 
+1. enableSessionCheck 값은 true 가 default 여야 되지 않을까?
+   > em.find() / session.byIds().load() 의 내부동작과 비교했을때 session.byMultipleIds().multiLoad() 는 sessionCheck 를 하는게 default 일것 같았다.
 
-   
-   
+2. enabelSessionCheck == true 일때, Entity 의 REMOVED 상태는 반환하지 않아야 되지 않을까?
+   > em.find() / session.byIds().load() 에서도 1차 Cache에 entity 가 있어도 REMOVED 상태면 반환하지 않는다. session.byMultipleIds().multiLoad() 도 마찬가지로 동작해야 될 것 같다.
+
+3. enableSessionCheck == false 이면, Query 를 실행시키기 전에 flush 를 시켜줘야 되지 않을까?
+   > 1차 Cache 를 확인하지 않는 JPQL 실행과 마찬가지로 flush 를 먼저 시켜줘야 일관된 결과를 반환할 것 같다.
+
+1번 은 Improvement , 2번 3번은 bug fix 로 생각해서 Issue 를 남기고 Pull Request 를 보냈다.
+[Issue](https://hibernate.atlassian.net/browse/HHH-10984)
+[Pull-Request](https://github.com/hibernate/hibernate-orm/pull/1489)
