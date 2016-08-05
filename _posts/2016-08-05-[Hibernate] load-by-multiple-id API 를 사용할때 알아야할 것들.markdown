@@ -51,6 +51,7 @@ Hibernate 는 기본 batch size 를 databse dialect 에 맞춰서 사용한다.
 JPQL Query 를 사용하여 entity 리스트를 조회하면 Hibernate 는 database 로 부터 대상이 되는 모든 entity 를 조회한 후에 현재 Session 의 1차 Cache 에서 이미 관리중인 entity 인지 체크한다.
 
 'MultiIdentifierLoadAccess interface' 의 'enableSessionCheck(boolean enabled)' 를 true 로 설정하면 Hibernate 가 database 에 Query 를 실행하기 전에 1차 Cache 를 체크하고 파라미터를 결정하게 할 수 있다.  (default : false)
+
 > enableSessionCheck(true) 를 설정하면, 이미 load 되어 1차 Cache 에 관리되고 있는 entity 의 id 는 IN statement 에 포함하지 않는다.
 
 {% gist mhyeon-lee/a6f69fa0d57938b9f11658cb5e32ebe2 MultiLoadCache.java %}
