@@ -17,3 +17,6 @@ github_username:  mhyeon-lee
 
 # Build settings
 markdown: kramdown
+
+gems:
+ - jekyll-gist
