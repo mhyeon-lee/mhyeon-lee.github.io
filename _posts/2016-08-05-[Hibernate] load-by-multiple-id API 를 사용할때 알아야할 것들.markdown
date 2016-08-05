@@ -142,7 +142,7 @@ JPA / Hibernate 에서 조회를 위해 사용하는 `em.find / session.byId().l
 
 2. `enableOrderedReturn` (default : true)
     > 파라미터로 보낸 id 의 순서로 정렬되어 결과 List 를 반환한다. <br />
-    > id 파라미터 중 결과가 없는 id 의 index 에는 null 로 셋팅되어 반환한다. (결과를 순회할 때 NPE 를 조심해야 한다.)
+    > id 파라미터 중 결과가 없는 id 의 index 에는 null 로 셋팅되어 반환한다. (결과를 순회할 때 NPE 를 조심해야 한다.) <br />
     > false 로 변경하면 쿼리 결과 순서로 결과를 반환한다. (`enableSesscionCheck == true` 이면, 1차 Cache 에 존재하는 Entity 들이 결과 List 의 앞에 배치된다.)
 
 [@72e9485](https://github.com/mhyeon-lee/hibernate-orm/commit/72e948514e95cbc2c7e8713a36ed461845d8c89e)
