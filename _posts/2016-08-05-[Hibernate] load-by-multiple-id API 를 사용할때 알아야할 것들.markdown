@@ -7,6 +7,10 @@ categories: Hibernate
 Hibernate 5.1 Release 에 추가된 load-by-multiple-id API 는 여러가지로 유용하게 사용할 수 있다. <br />
 [Hibernate 5.1 Release](http://in.relation.to/2016/02/10/hibernate-orm-510-final-release/)
 
+이 글에 대한 결론 부터 이야기하고 내용을 풀어보겠다.
+
+**load-by-multiple-id API 는 여러 옵션에 따라서 기대되는 실행 결과가 달라진다. 그러니 옵션들과 그에 따른 영향들을 잘 모르겠으면 차라리 사용하지 말자. JPQL 로 충분하다.**
+
 아래 글에 API 에 대한 간단한 소개가 있어 이에 대한 요약과 이외에 조심해야 되는 부분, 그리고 5.2.2 에서 추가되는 옵션에 대해서 간단히 정리하고자 한다. <br /> [How to fetch muliple entities by id with Hibernate 5](http://www.thoughts-on-java.org/fetch-multiple-entities-id-hibernate/)
 
 ## How to fetch muliple entities by id with Hibernate 5 요약
@@ -115,14 +119,14 @@ enableSessionCheck == true 라도 일관되지 않은 결과가 나온다.
 2번은 REMOVED 를 체크해서 반환하지 않는 옵션을 추가하기로 결정 (default = false)
 3번은 "Working as Designed" 라면서 Reject (원래 저렇게 되도록 설계했다는 것이다.)
 
-내 Pull-Request 는 reject 시키고, 2번만 자기들이 개발해서 반영했다. <br />
-[Commit](https://github.com/mhyeon-lee/hibernate-orm/commit/72e948514e95cbc2c7e8713a36ed461845d8c89e)
+내 Pull-Request 는 reject 시키고, 2번만 자기들이 옵션 추가하는 방향으로 개발해서 커밋했더라.... <br />
+
 
 **결론**
 
 JPA / Hibernate 에서 조회를 위해 사용하는 em.find / session.byId().load() / JPQL 과 다른 결과를 반환하는 점을 발견하고 Bug 라고 판단하여 Issue + Pull-Request 를 보냈지만 "Working as Designed" 로 결론. <br />
 2번은 옵션을 추가하여 Hibernate 5.2.2 에 반영되었고, 3번은 아직 남아있다. <br />
-따라서 multiLoad 를 사용할 때는 JPQL 과 같이 flush 되지 않고 enableSessionCheck == true 일때 remove 된 결과가 반환될 수 있다는 것을 알고 사용해야 한다. (5.2.2 에서 2번은 옵션으로 true 를 셋팅해서 해결할 수 있다.)
+따라서 multiLoad 를 사용할 때는 JPQL 과 같이 flush 되지 않고 flush 되지 않은 remove 된 결과가 반환될 수 있다는 것을 알고 사용해야 한다. (5.2.2 에서 2번은 해결되었다.)
 
 **이런 저런 옵션과 상황에 따라 달라지는 결과가 복잡하고 이해할 수 없다면 multiLoad 를 사용하지 말고 그냥 JPQL 을 사용하는게 속편하다.**
 
@@ -131,4 +135,13 @@ JPA / Hibernate 에서 조회를 위해 사용하는 em.find / session.byId().lo
 
 5.2.2 에서 multiLoad 와 관련하여 2가지 옵션이 추가된다.
 
-1. 위에서 언급한 
+1. enableReturnOfDeletedEntities (default : false)
+    > 2번에 대한 이슈 대안으로 추가된 옵션이다. <br />
+    > default 는 false 이며, true 로 변경 시 Deleted 된(non-flushed) entity 도 결과에 반환한다.
+
+2. enableOrderedReturn (default : true)
+    > 파라미터로 보낸 id 의 순서로 정렬되어 결과 List 를 반환한다. <br />
+    > id 파라미터 중 결과가 없는 id 의 index 에는 null 로 셋팅되어 반환한다. (결과를 순회할 때 NPE 를 조심해야 한다.)
+    > false 로 변경하면 쿼리 결과 순서로 결과를 반환한다. (enableSesscionCheck == true 이면, 1차 Cache 에 존재하는 Entity 들이 결과 List 의 앞에 배치된다.)
+
+[@72e9485](https://github.com/mhyeon-lee/hibernate-orm/commit/72e948514e95cbc2c7e8713a36ed461845d8c89e)
