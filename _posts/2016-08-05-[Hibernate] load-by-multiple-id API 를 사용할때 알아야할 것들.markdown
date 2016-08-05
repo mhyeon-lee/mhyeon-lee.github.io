@@ -40,10 +40,8 @@ Hiberante 는 3개의 Id 를 파라미터로 IN statement Query 를 실행한다
 
 ### Load entities in muliple batches
 
-이러한 종류의 Query 를 사용할 때 batch 를 사용해야 하는 경우가 몇가지 있다.
+Hibernate 는 기본 batch size 를 databse dialect 에 맞춰서 사용한다.
+그러나 특정 상황에서 batch size 를 변경해야할 경우 'withBatchSize(int batchSize)' 메소드를 사용할 수 있다.
 
-1. 일부 database 는 IN statement 파라미터 갯수에 제한을 둔다.
-
-2. 비즈니스 로직에서 해당되는 모든 엔티티를 필요로 하지 않는 경우가 있다.
-
-3. 다음 batch 를 실행할 때 1차 cache 에 올라온 entity 들을 제거하고 싶은 경우가 있다.
+{% gist mhyeon-lee/bf94e2fe99fd336a43192be2a6481bbd MultiLoadBatch.java %}
+{% gist https://gist.github.com/mhyeon-lee/cf215b039b7b85e2f9f59911d5721bda MultiLoadBatch.sql %}
