@@ -99,10 +99,10 @@ enableSessionCheck == true 라도 일관되지 않은 결과가 나온다.
 기존의 em.find() / JPQL 의 동작 결과와 일관성을 유지하고 친숙한 동작 방식으로 아래와 같이 고쳐져야 할 것 같았다.
 
 1. enableSessionCheck 값은 true 가 default 여야 되지 않을까?
-   > em.find() / session.byIds().load() 의 내부동작과 비교했을때 session.byMultipleIds().multiLoad() 는 sessionCheck 를 하는게 default 일것 같았다.
+   > em.find() / session.byId().load() 의 내부동작과 비교했을때 session.byMultipleIds().multiLoad() 는 sessionCheck 를 하는게 default 일것 같았다.
 
 2. enabelSessionCheck == true 일때, Entity 의 REMOVED 상태는 반환하지 않아야 되지 않을까?
-   > em.find() / session.byIds().load() 에서도 1차 Cache에 entity 가 있어도 REMOVED 상태면 반환하지 않는다. session.byMultipleIds().multiLoad() 도 마찬가지로 동작해야 될 것 같다.
+   > em.find() / session.byId().load() 에서도 1차 Cache에 entity 가 있어도 REMOVED 상태면 반환하지 않는다. session.byMultipleIds().multiLoad() 도 마찬가지로 동작해야 될 것 같다.
 
 3. enableSessionCheck == false 이면, Query 를 실행시키기 전에 flush 를 시켜줘야 되지 않을까?
    > 1차 Cache 를 확인하지 않는 JPQL 실행과 마찬가지로 flush 를 먼저 시켜줘야 일관된 결과를 반환할 것 같다.
@@ -115,5 +115,13 @@ enableSessionCheck == true 라도 일관되지 않은 결과가 나온다.
 2번은 REMOVED 를 체크해서 반환하지 않는걸로 결정
 3번은 "Working as Designed" 라면서 Reject (원래 저렇게 되도록 설계했다는 것이다.)
 
-내 Pull-Request 는 reject 시키고, 2번만 자기들이 개발해서 반영...
+내 Pull-Request 는 reject 시키고, 2번만 자기들이 개발해서 반영했다. <br />
+https://github.com/mhyeon-lee/hibernate-orm/commit/72e948514e95cbc2c7e8713a36ed461845d8c89e
+
+**결론**
+JPA / Hibernate 에서 조회를 위해 사용하는 em.find / session.byId().load() / JPQL 과 다른 결과를 반환하는 점을 발견하고 Bug 라고 판단하여 Issue + Pull-Request 를 보냈지만 "Working as Designed" 로 결론.
+2번은 수정되어서 Hibernate 5.2.2 에 반영되었고, 3번은 아직 남아있다.
+따라서 multiLoad 를 사용할 때는 JPQL 과 같이 flush 되지 않아 다른 결과를 반환할 수 있다는 점을 인지하고 사용해야 한다.
+
+
 
