@@ -44,4 +44,4 @@ Hibernate 는 기본 batch size 를 databse dialect 에 맞춰서 사용한다.
 그러나 특정 상황에서 batch size 를 변경해야할 경우 'withBatchSize(int batchSize)' 메소드를 사용할 수 있다.
 
 {% gist mhyeon-lee/bf94e2fe99fd336a43192be2a6481bbd MultiLoadBatch.java %}
-{% gist https://gist.github.com/mhyeon-lee/cf215b039b7b85e2f9f59911d5721bda MultiLoadBatch.sql %}
+{% gist mhyeon-lee/cf215b039b7b85e2f9f59911d5721bda MultiLoadBatch.sql %}
