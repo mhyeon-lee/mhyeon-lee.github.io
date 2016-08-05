@@ -5,7 +5,7 @@ date:   2016-08-05 10:55:52 +0900
 categories: Hibernate
 ---
 Hibernate 5.1 Release 에 추가된 load-by-multiple-id API 는 여러가지로 유용하게 사용할 수 있다. <br />
-[Hibernate 5.1 Release](http://in.relation.to/2016/02/10/hibernate-orm-510-final-release/)
+[Hibernate 5.1 Release](http://in.relation.to/2016/02/10/hibernate-orm-510-final-release/) <br />
 그럼에도 불구하고, 아직은 사용하지 않기를 권한다.
 
 이 글에 대한 결론 부터 이야기하고 내용을 풀어보겠다.
