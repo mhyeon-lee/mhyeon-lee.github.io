@@ -9,7 +9,7 @@ Hibernate 5.1 Release 에 추가된 load-by-multiple-id API 는 여러가지로 
 
 아래 글에 API 에 대한 간단한 소개가 있어 이에 대한 요약과 이외에 조심해야 되는 부분, 그리고 5.2.2 에서 추가되는 옵션에 대해서 간단히 정리하고자 한다. <br /> [How to fetch muliple entities by id with Hibernate 5](http://www.thoughts-on-java.org/fetch-multiple-entities-id-hibernate/)
 
-## load-by-multiple-id API 란? (요약)
+## load-by-multiple-id API (요약)
 
 JPA 나 Hibernate 5.1 이전 버전를 사용할 때 database 에서 다수의 entity들을 조회하기 위한 방법으로 2가지를 생각할 수 있다.
 
@@ -25,7 +25,7 @@ JPA 나 Hibernate 5.1 이전 버전를 사용할 때 database 에서 다수의 e
    > 많은 엔티티를 한번의 batch 로 조회하게 되면 성능 이슈가 발생할 수 있다. <br />
    > Hibernate 1차 Cache(Session) 에 이미 올라와 있는 엔티티를 체크하지 않고 모든 엔티티를 database 에서 조회한다. <br />
    
-### Load multiple entities by their primary key
+* Load multiple entities by their primary key
 
 Hibernate 5.1 은 다수의 엔티티들을 한번의 API 실행하고 위와 같은 문제점들을 회피할 수 있는 새로운 API 를 제공한다.
 
@@ -38,10 +38,14 @@ Hiberante 는 3개의 Id 를 파라미터로 IN statement Query 를 실행한다
 
 직접 IN statement 를 사용해서 JPQL Query를 만드는 것과 같은 SQL 이 실행된다.
 
-### Load entities in muliple batches
+* Load entities in muliple batches
 
 Hibernate 는 기본 batch size 를 databse dialect 에 맞춰서 사용한다.
 그러나 특정 상황에서 batch size 를 변경해야할 경우 'withBatchSize(int batchSize)' 메소드를 사용할 수 있다.
 
 {% gist mhyeon-lee/bf94e2fe99fd336a43192be2a6481bbd MultiLoadBatch.java %}
 {% gist mhyeon-lee/cf215b039b7b85e2f9f59911d5721bda MultiLoadBatch.sql %}
+
+* Don't fetch entities already stored in 1st level cache
+
+JPQL Query 를 사용하여
