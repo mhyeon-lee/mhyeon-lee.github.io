@@ -107,6 +107,8 @@ enableSessionCheck == true 라도 일관되지 않은 결과가 나온다.
 3. enableSessionCheck == false 이면, Query 를 실행시키기 전에 flush 를 시켜줘야 되지 않을까?
    > 1차 Cache 를 확인하지 않는 JPQL 실행과 마찬가지로 flush 를 먼저 시켜줘야 일관된 결과를 반환할 것 같다.
 
-1번 은 Improvement , 2번 3번은 bug fix 로 생각해서 Issue 를 남기고 Pull Request 를 보냈다.
-[Issue](https://hibernate.atlassian.net/browse/HHH-10984)
+1번 은 Improvement , 2번 3번은 bug fix 로 생각해서 Issue 를 남기고 Pull Request 를 보냈다. <br />
+[Issue](https://hibernate.atlassian.net/browse/HHH-10984) , 
 [Pull-Request](https://github.com/hibernate/hibernate-orm/pull/1489)
+
+
