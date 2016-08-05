@@ -13,9 +13,15 @@ Hibernate 5.1 Release 에 추가된 load-by-multiple-id API 는 여러가지로 
 
 JPA 나 Hibernate 5.1 이전 버전를 사용할 때 database 에서 다수의 entity들을 조회하기 위한 방법으로 2가지를 생각할 수 있다.
 
-1. 조회하고자 하는 id 각각을 EntityManager.find 메소드를 사용하여 쿼리를 각각 실행한다.
+1. 조회하고자 하는 id 각각을 EntityManager.find 메소드를 사용하여 Query를 각각 실행한다.
+
+> 조회하고자 하는 Entity 가 많다면 너무 많은 Query 를 실행하게 되서 Application 의 성능 저하가 발생할 수 있다.
  
-2. IN 조건을 사용하여 query 를 만들어서 실행한다.
+2. IN statement를 사용하여 query 를 만들어서 실행한다.
 
 {% gist mhyeon-lee/3cbecf69967a624697b178a99b299882 JpaQuery.java %}
+
+> Oracle과 같은 몇개의 database 는 IN statement의 파라미터 갯수에 제한을 둔다.
+> 많은 엔티티를 한번의 batch 로 조회하게 되면 성능 이슈가 발생할 수 있다.
+> Hibernate 1차 Cache(Session) 에 이미 올라와 있는 엔티티를 체크하지 않고 모든 엔티티를 database 에서 조회한다.
 
