@@ -9,7 +9,7 @@ Hibernate 5.1 Release 에 추가된 load-by-multiple-id API 는 여러가지로 
 
 이 글에 대한 결론 부터 이야기하고 내용을 풀어보겠다.
 
-**load-by-multiple-id API 는 여러 옵션에 따라서 기대되는 실행 결과가 달라진다. 그러니 옵션들과 그에 따른 영향들을 잘 모르겠으면 차라리 사용하지 말자. JPQL 로 충분하다.**
+**load-by-multiple-id API 는 여러 옵션에 따라서 기대되는 실행 결과가 달라진다. 그러니 옵션들과 그에 따른 영향들을 잘 모르겠으면 차라리 사용하지 말자. JPQL 로 충분하다. (현재 버전 Hibernate 5.2.2)**
 
 아래 글에 API 에 대한 간단한 소개가 있어 이에 대한 요약과 이외에 조심해야 되는 부분, 그리고 5.2.2 에서 추가되는 옵션에 대해서 간단히 정리하고자 한다. <br /> [How to fetch muliple entities by id with Hibernate 5](http://www.thoughts-on-java.org/fetch-multiple-entities-id-hibernate/)
 
@@ -45,7 +45,7 @@ Hiberante 는 3개의 Id 를 파라미터로 IN statement Query 를 실행한다
 **Load entities in muliple batches**
 
 Hibernate 는 기본 batch size 를 databse dialect 에 맞춰서 사용한다.
-그러나 특정 상황에서 batch size 를 변경해야할 경우 'withBatchSize(int batchSize)' 메소드를 사용할 수 있다.
+그러나 특정 상황에서 batch size 를 변경해야할 경우 `withBatchSize(int batchSize)` 메소드를 사용할 수 있다.
 
 {% gist mhyeon-lee/bf94e2fe99fd336a43192be2a6481bbd MultiLoadBatch.java %}
 {% gist mhyeon-lee/cf215b039b7b85e2f9f59911d5721bda MultiLoadBatch.sql %}
@@ -54,7 +54,7 @@ Hibernate 는 기본 batch size 를 databse dialect 에 맞춰서 사용한다.
 
 JPQL Query 를 사용하여 entity 리스트를 조회하면 Hibernate 는 database 로 부터 대상이 되는 모든 entity 를 조회한 후에 현재 Session 의 1차 Cache 에서 이미 관리중인 entity 인지 체크한다.
 
-'MultiIdentifierLoadAccess interface' 의 'enableSessionCheck(boolean enabled)' 를 true 로 설정하면 Hibernate 가 database 에 Query 를 실행하기 전에 1차 Cache 를 체크하고 파라미터를 결정하게 할 수 있다.  (default : false)
+`MultiIdentifierLoadAccess interface` 의 `enableSessionCheck(boolean enabled)` 를 true 로 설정하면 Hibernate 가 database 에 Query 를 실행하기 전에 1차 Cache 를 체크하고 파라미터를 결정하게 할 수 있다.  (default : false)
 
 > enableSessionCheck(true) 를 설정하면, 이미 load 되어 1차 Cache 에 관리되고 있는 entity 의 id 는 IN statement 에 포함하지 않는다.
 
