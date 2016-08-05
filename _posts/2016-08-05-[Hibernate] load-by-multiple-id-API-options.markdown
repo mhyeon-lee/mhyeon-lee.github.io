@@ -66,7 +66,7 @@ JPQL Query 를 사용하여 entity 리스트를 조회하면 Hibernate 는 datab
 
 ----
 
-<br />
+
 ## Bug? Woking as Designed? (Hibernate v5.1.1)
 
 위에 글에서 `load-by-multiple-id API` 의 특징들에 대해 잘 소개되어 있었다.
