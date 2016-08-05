@@ -62,7 +62,7 @@ JPQL Query 를 사용하여 entity 리스트를 조회하면 Hibernate 는 datab
 {% gist mhyeon-lee/a6f69fa0d57938b9f11658cb5e32ebe2 MultiLoadCache.java %}
 {% gist mhyeon-lee/4137dc7ef86f575efaf72dff222b7962 MultiLoadCache.log %}
 
-===========================================================
+----
 
 ## Bug? Woking as Designed? (Hibernate v5.1.1)
 
