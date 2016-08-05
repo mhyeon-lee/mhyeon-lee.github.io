@@ -57,7 +57,7 @@ JPQL Query 를 사용하여 entity 리스트를 조회하면 Hibernate 는 datab
 {% gist mhyeon-lee/a6f69fa0d57938b9f11658cb5e32ebe2 MultiLoadCache.java %}
 {% gist mhyeon-lee/4137dc7ef86f575efaf72dff222b7962 MultiLoadCache.log %}
 
-## Bug? Woking as Design? (Hibernate v5.1.1)
+## Bug? Woking as Designed? (Hibernate v5.1.1)
 
 해당 글에서 load-by-multiple-id API 의 특징들에 대해 잘 소개되어 있다.
 여기서 언급되지 않았지만, 사용하면서 경험한 몇가지 특징들을 추가적으로 적어보겠다.
@@ -111,4 +111,9 @@ enableSessionCheck == true 라도 일관되지 않은 결과가 나온다.
 [Issue](https://hibernate.atlassian.net/browse/HHH-10984) , 
 [Pull-Request](https://github.com/hibernate/hibernate-orm/pull/1489)
 
+1번은 파라미터로 넘어온 id 리스트가 클 경우 세션 체크를 위해 순회하는 오버헤드가 걱정된다.
+2번은 REMOVED 를 체크해서 반환하지 않는걸로 결정
+3번은 "Working as Designed" 라면서 Reject (원래 저렇게 되도록 설계했다는 것이다.)
+
+내 Pull-Request 는 reject 시키고, 2번만 자기들이 개발해서 반영...
 
