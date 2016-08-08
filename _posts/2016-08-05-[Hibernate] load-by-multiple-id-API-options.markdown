@@ -109,21 +109,24 @@ remove 후에 `em.find()` 로 조회하면 아직 1차 Cache 에는 관리되고
 기존의 `em.find() / JPQL` 의 동작 결과와 일관성을 유지하고 친숙한 동작 방식으로 아래와 같이 고쳐져야 할 것 같았다.
 
 1. `enableSessionCheck` 값은 true 가 default 여야 되지 않을까?
+
    > `em.find() / session.byId().load()` 의 내부동작과 비교했을때 `session.byMultipleIds().multiLoad()` 는 sessionCheck 를 하는게 default 일것 같았다.
 
 2. `enabelSessionCheck == true` 일때, Entity 의 `REMOVED` 상태는 반환하지 않아야 되지 않을까?
+
    > `em.find() / session.byId().load()` 에서도 1차 Cache에 entity 가 있어도 `REMOVED` 상태면 반환하지 않는다. `session.byMultipleIds().multiLoad()` 도 마찬가지로 동작해야 될 것 같다.
 
 3. `enableSessionCheck == false` 이면, Query 를 실행시키기 전에 `flush` 를 시켜줘야 되지 않을까?
+
    > 1차 Cache 를 확인하지 않는 JPQL 실행과 마찬가지로 `flush` 를 먼저 시켜줘야 일관된 결과를 반환할 것 같다.
 
 1번 은 Improvement , 2번 3번은 bug fix 로 생각해서 Issue 를 남기고 Pull-Request 를 보냈다. <br />
 [Issue](https://hibernate.atlassian.net/browse/HHH-10984) , 
 [Pull-Request](https://github.com/hibernate/hibernate-orm/pull/1489)
 
-1번은 파라미터로 넘어온 id 리스트가 클 경우 세션 체크를 위해 순회하는 오버헤드가 걱정된다.
-2번은 `REMOVED` 를 체크해서 반환하지 않는 옵션을 추가하기로 결정 (default = false)
-3번은 "Working as Designed" 라면서 Reject (원래 저렇게 되도록 설계했다는 것이다.)
+1번은 파라미터로 넘어온 id 리스트가 클 경우 세션 체크를 위해 순회하는 오버헤드가 걱정된다. <br />
+2번은 `REMOVED` 를 체크해서 반환하지 않는 옵션을 추가하기로 결정 (default = false) <br />
+3번은 "Working as Designed" 라면서 Reject (원래 저렇게 되도록 설계했다는 것이다.) <br />
 
 내 Pull-Request 는 reject 시키고, 2번만 자기들이 옵션 추가하는 방향으로 개발해서 Commit했더라.... <br />
 
