@@ -2,7 +2,7 @@ title: mhyeon-lee blog
 description: > # this means to ignore newlines until "baseurl:"
   Developer
 permalink: ':title/'
-baseurl: "" # the subpath of your site, e.g. /blog
+baseurl: "https://mhyeon-lee.github.io" # the subpath of your site, e.g. /blog
 url: "https://mhyeon-lee.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 site-twitter: #if your site has a twitter account, enter it here
 
